@@ -18,8 +18,8 @@
           <div class="file-title">附件</div>
           <div class="file-list">
             <div class="file-item" v-for="(file, index) in files">
-              <span class="file-item-title">附件{{ index + 1 }}</span>
-              <a :href="file.fileUrl" @click="download(file.fileName, file.fileUrl)" target="_blank">{{ file.fileName
+              <span class="file-item-title">附件{{ index + 1 }}. </span>
+              <a :href="file.fileUrl" @click="download(file.fileName, file.filePath)" target="_blank">{{ file.fileName
                 }}</a>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default {
           this.content = response.data.bidContent
           this.author = response.data.bidPublisher
           this.publishTime = response.data.bidPublishDatetime
-          this.files = response.data.bidFile
+          this.files = response.data.filesList
           this.loading = false
         })
       })
@@ -139,55 +139,6 @@ export default {
     word-break: normal;
     line-height: 1.5;
     margin-bottom: 1.7em;
-  }
-}
-
-.file-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 50px;
-  justify-content: flex-start;
-  text-align: left;
-  margin-left: 20px;
-
-  .file-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    font-family: '仿宋';
-  }
-
-  .file-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    .file-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-right: 30px;
-      margin-bottom: 30px;
-
-      span {
-        font-size: 16px;
-        color: #333;
-        margin-bottom: 10px;
-        font-family: '仿宋';
-      }
-
-      a {
-        font-size: 16px;
-        color: #409EFF;
-        text-decoration: underline;
-
-        &:hover {
-          color: #67C23A;
-        }
-      }
-    }
   }
 }
 </style>

@@ -189,3 +189,55 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+.file-wrap {
+  display: flex;
+  flex-direction: column;
+  -ms-flex-direction: column;
+  align-items: flex-start;
+  margin-top: 50px;
+  justify-content: flex-start;
+  text-align: left;
+  margin-left: 20px;
+
+  .file-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: '仿宋';
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    flex-wrap: wrap;
+
+    .file-item {
+      display: flex;
+      flex-direction: row;
+      -ms-flex-direction: row;
+      align-items: center;
+      margin-right: 30px;
+      margin-bottom: 30px;
+
+      span {
+        font-size: 16px;
+        color: #333;
+        font-family: '仿宋';
+      }
+
+      a {
+        font-size: 16px;
+        color: #333;
+        text-decoration: none;
+        font-family: '仿宋';
+
+        &:hover {
+          color: #0061b4;
+        }
+      }
+    }
+  }
+}
