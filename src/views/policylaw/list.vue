@@ -13,7 +13,7 @@
                 <div class="card-content">
                   <span class="title">{{ item.title }}</span>
                   <div class="bottom clearfix">
-                    <time class="time">发布时间: {{ parseTime(item.bidPublishDatetime, '{y}-{m}-{d}') }}</time>
+                    <time class="time">发布时间: {{ parseTime(item.publishDatetime, '{y}-{m}-{d}') }}</time>
                     <el-button type="text" class="button" @click="toDetail(item.id)">查看详情</el-button>
                   </div>
                 </div>
