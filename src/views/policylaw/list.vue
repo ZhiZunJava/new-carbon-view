@@ -2,7 +2,7 @@
   <div class="main">
     <el-breadcrumb separator="/" class="breadcrumb" style="padding: 0 20px">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/info/list' }">政策法规</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/policylaw/list' }">政策法规</el-breadcrumb-item>
     </el-breadcrumb>
     <div style="margin-top: 20px">
       <el-container>
