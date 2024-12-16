@@ -2,8 +2,8 @@
   <div class="main">
     <el-breadcrumb separator="/" class="breadcrumb" style="padding: 0 20px">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/bid/list?type=bidding' }">平台动态</el-breadcrumb-item>
-      <el-breadcrumb-item>动态详情页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/bid/list' }">公告列表页</el-breadcrumb-item>
+      <el-breadcrumb-item>公告详情页</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="content">
       <el-card v-loading="loading" shadow="hover" :body-style="{ padding: '12px', 'border-radius': '6px' }">
@@ -76,10 +76,10 @@ export default {
   },
   async created() {
     this.id = this.$route.query.id
-    this.type = this.$route.query.type
+    // this.type = this.$route.query.type
   },
   mounted() {
-    if (this.type === 'bidding') {
+    // if (this.type === 'bidding') {
       this.loading = true;
       getBidding(this.id).then(response => {
         this.$nextTick(() => {
@@ -92,7 +92,7 @@ export default {
           this.loading = false
         })
       })
-    }
+   // }
   },
 
 }

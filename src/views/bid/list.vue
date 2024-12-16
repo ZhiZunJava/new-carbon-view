@@ -2,32 +2,26 @@
   <div class="main">
     <el-breadcrumb separator="/" class="breadcrumb" style="padding: 0 20px">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/info/list' }">平台动态</el-breadcrumb-item>
+      <el-breadcrumb-item>公告列表页</el-breadcrumb-item>
     </el-breadcrumb>
-    <div style="margin-top: 20px">
+    <div>
       <el-container>
         <el-main v-loading="loading">
-          <el-row :gutter="20" v-if="data.length > 0" type="flex" style="flex-wrap:wrap;row-gap: 12px;">
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" v-for="(item) in data" :key="item.id">
-              <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                <div class="card-content">
-                  <span class="title">
-                    <template v-if="type === 'bidding'">
-                      【{{ item.bidPublisher }}】{{ item.bidTitle }}
-                    </template>
-                  </span>
-                  <div class="bottom clearfix">
-                    <time class="time">发布时间: {{ parseTime(item.bidPublishDatetime, '{y}-{m}-{d}') }}</time>
-                    <el-button type="text" class="button" @click="toDetail(item.id)">查看详情</el-button>
-                  </div>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-          <div v-else style="text-align: center;margin-top: 50px">暂无数据</div>
-          <pagination style="background-color: transparent;" v-show="total > 0" :total="total"
-            :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" :page-sizes="[6, 12, 24, 32, 64]"
-            background @pagination="getList"></pagination>
+          <div class="content">
+            <el-table v-loading="loading" style="width: 100%" :data="data" :header-cell-style="{
+              background: '#F6FDFD', height: '46px', color: '#000000', border: '0px solid tan', boxShadow: 'inset 0px -1px 0px 0px #EEEEEE'
+            }" :row-style="{ height: '50px' }" @row-click="handleTableRow">
+              <el-table-column label="序号" type="index" width="244"></el-table-column>
+              <el-table-column label="招投标标题" align="left" width="530" prop="bidTitle" />
+              <el-table-column label="发布时间" align="left" prop="bidPublishDatetime">
+                <template slot-scope="scope">
+                  <span>{{ parseTime(scope.row.bidPublishDatetime, '{y}-{m}-{d}') }}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize" @pagination="getList" />
+          </div>
         </el-main>
       </el-container>
     </div>
@@ -42,18 +36,19 @@ export default {
   name: "list",
   data() {
     return {
-      type: '',
+      category: null,
       loading: false,
       data: [],
       total: 0,
       queryParams: {
         pageNum: 1,
         pageSize: 12,
+        category: null
       },
     }
   },
   async created() {
-    this.type = this.$route.query.type
+    this.category = this.$route.query.category;
   },
   mounted() {
     this.getList()
@@ -61,14 +56,15 @@ export default {
   methods: {
     getList() {
       this.loading = true
+      this.queryParams.category = this.category
       listBidding(this.queryParams).then(response => {
         this.data = response.rows;
         this.total = response.total;
         this.loading = false
       })
     },
-    toDetail(id) {
-      this.$router.push({ path: '/bid/detail/', query: { id: id, type: this.type } })
+    handleTableRow(row, column, event) {
+      this.$router.push(`/bid/detail?id=${row.id}`)
     }
   }
 }
@@ -82,6 +78,14 @@ export default {
   overflow: hidden;
   font-weight: 700;
   color: #1f2f3d;
+}
+
+.content {
+  background: #FFFFFF;
+  border-radius: 10px;
+  opacity: 1;
+  min-height: 860px;
+  padding: 24px 21px 0 21px;
 }
 
 .time {

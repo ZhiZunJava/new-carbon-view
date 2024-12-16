@@ -7,71 +7,36 @@
         <swiper-slide><img :src="swiperImage3" class="bannerImage" /></swiper-slide>
       </swiper>
     </div>
-    <div class="noticeWrapper">
-      <div class="notice_Item">
-        <div class="notice_title">
-          <span class="notice_title_text">招标预告</span>
-          <span class="notice_title_more">更多
-            <img src="@/assets/images/pic2.png" alt="" />
-          </span>
-        </div>
-        <div class="notice_content">
-        </div>
-      </div>
-      <div class="notice_Item">
-        <div class="notice_title">
-          <span class="notice_title_text">招标公告</span>
-          <span class="notice_title_more">更多
-            <img src="@/assets/images/pic2.png" alt="" />
-          </span>
-        </div>
-        <div class="notice_content">
-        </div>
-      </div>
-      <div class="notice_Item">
-        <div class="notice_title">
-          <span class="notice_title_text">中标公告</span>
-          <span class="notice_title_more" @click="toMoreList('bidding')">更多
-            <img src="@/assets/images/pic2.png" alt="" />
-          </span>
-        </div>
-        <div class="notice_content" v-loading="bidding.loading">
-          <template v-if="bidding.data.length > 0">
-            <div class="notice_content_item" @click="toDetail(item.id, 'bidding')" v-for="item in bidding.data" :key="item.id">
-              <div class="notice_content_item_img">
-                <img src="@/assets/images/pic3.png" alt="" />
-              </div>
-              <div class="notice_content_item_title">【{{ item.bidPublisher }}】{{ item.bidTitle }}</div>
-              <div class="notice_content_item_time">{{ parseTime(item.bidPublishDatetime, '{y}-{m}-{d}') }}</div>
-            </div>
-          </template>
-          <div v-else>
-            <div style="text-align: center;margin-top: 50px">暂无数据</div>
-          </div>
-        </div>
-      </div>
-      <div class="notice_Item">
-        <div class="notice_title">
-          <span class="notice_title_text">企业采购</span>
-          <span class="notice_title_more">更多
-            <img src="@/assets/images/pic2.png" alt="" />
-          </span>
-        </div>
-        <div class="notice_content">
-        </div>
-      </div>
+    <div style="margin-top: 30px">
+      <el-row>
+        <el-col :span="12" style="display: flex;justify-content: center;">
+          <home-card title="招标预告" :source-data="bidData1" :category="1"/>
+        </el-col>
+        <el-col :span="12" style="display: flex;justify-content: center;">
+          <home-card title="招标公告" :source-data="bidData2" :category="2"/>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 30px">
+        <el-col :span="12" style="display: flex;justify-content: center;">
+          <home-card title="中标公告" :source-data="bidData3" :category="3"/>
+        </el-col>
+        <el-col :span="12" style="display: flex;justify-content: center;">
+          <home-card title="企业采购" :source-data="bidData4" :category="4"/>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
+import HomeCard from "@/components/Platform/HomeCard.vue";
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 // Import Swiper styles
 import 'swiper/dist/css/swiper.css'
 import { listBidding } from '../api/bid/bidding/bidding';
 export default {
   name: "index",
-  components: { swiper, swiperSlide },
+  components: { swiper, swiperSlide,HomeCard },
   data() {
     return {
       swiperImage1: require('@/assets/images/swiper1.png'),
@@ -90,27 +55,43 @@ export default {
         loading: false,
         queryParams: {
           pageNum: 1,
-          pageSize: 10
+          pageSize: 10,
+          category: null
         },
         data: [],
         total: 0
-      }
+      },
+      bidData1: null,
+      bidData2: null,
+      bidData3: null,
+      bidData4: null,
     }
   },
   async created() {
-    this.getBiddingList()
+    // this.getBiddingList()
   },
   mounted() {
-
+    this.$nextTick(async() => {
+      this.bidData1 = await this.getBidData(1);
+      this.bidData2 = await this.getBidData(2);
+      this.bidData3 = await this.getBidData(3);
+      this.bidData4 = await this.getBidData(4);
+    })
   },
   methods: {
-    getBiddingList() {
-      this.bidding.loading = true
-      listBidding(this.bidding.queryParams).then(response => {
-        this.bidding.data = response.rows;
-        this.bidding.total = response.total;
-        this.bidding.loading = false
-      })
+    // getBiddingList() {
+    //   this.bidding.loading = true
+    //   listBidding(this.bidding.queryParams).then(response => {
+    //     this.bidding.data = response.rows;
+    //     this.bidding.total = response.total;
+    //     this.bidding.loading = false
+    //   })
+    // },
+    async getBidData(category) {
+      const that = this;
+      const params = that.bidding.queryParams;
+      params.category = category;
+      return listBidding(params);
     },
     toDetail(id, type) {
       this.$router.push({ path: '/bid/detail/', query: { id: id, type: type } })
